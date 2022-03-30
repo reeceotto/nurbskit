@@ -466,13 +466,10 @@ def TopEllipse(a, b, h=0, k=0):
 
 def Rectangle(width, height, centre_x=0, centre_y=0):
     P = [[centre_x-width/2, centre_y], [centre_x-width/2, centre_y+height/2],
-     [centre_x-width/2, centre_y+height/2], [centre_x, centre_y+height/2],
-     [centre_x+width/2, centre_y+height/2], 
-     [centre_x+width/2, centre_y+height/2], [centre_x+width/2, centre_y],
-     [centre_x+width/2, centre_y-height/2], 
-     [centre_x+width/2, centre_y-height/2],
+     [centre_x, centre_y+height/2], [centre_x+width/2, centre_y+height/2], 
+     [centre_x+width/2, centre_y], [centre_x+width/2, centre_y-height/2], 
      [centre_x, centre_y-height/2], [centre_x-width/2, centre_y-height/2], 
-     [centre_x-width/2, centre_y-height/2], [centre_x-width/2, centre_y]]
-    p = 2
+     [centre_x-width/2, centre_y]]
+    p = 1
     U = auto_knot_vector(len(P), p)
     return BSpline(P=P, p=p, U=U)
