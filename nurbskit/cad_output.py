@@ -199,7 +199,7 @@ def nurbs_surf_to_iges(NURBSSurface, file_name='nurbs_surf'):
     # 3 - directory entry section
     dir_dict = {
         'entity_no1' : 128,
-        'param_data' : 3,
+        'param_data' : 1,
         'structure' : 0,
         'line_font_pattern' : 0,
         'level' : 0,

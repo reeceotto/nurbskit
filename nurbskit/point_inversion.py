@@ -47,8 +47,8 @@ def point_proj_path(path, xyz_point, n_param_guesses=3, max_sub_it=10,
         # initialise iteration index
         j = 0
 
-        # perform Newton iterations until Euclidean distance is within tolerance OR
-        # there is zero cosine between xyz_point and projected point
+        # perform Newton iterations until Euclidean distance is within tolerance 
+        # OR there is zero cosine between xyz_point and projected point
         while (distance(path, xyz_point, u_old) > tol_dist) and \
         (zero_cos(path, xyz_point, u_old) > tol_cos) and \
         j < max_sub_it:
