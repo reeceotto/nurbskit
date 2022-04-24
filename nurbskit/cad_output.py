@@ -34,7 +34,7 @@ def iges_prep(file_name='cad_file'):
         'record_delim' : ';',
         'product_ID_sender' : 'NURBS',
         'file_name' : file_name + '.IGES',
-        'native_system_ID' : 'pyffd',
+        'native_system_ID' : 'nurbskit',
         'preprocessor_version' : 'V0.1.0',
         'int_bits' : 32,
         'single_prec_mag' : 38,
