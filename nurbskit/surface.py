@@ -3,6 +3,7 @@ Spline-based surface classes.
 
 Author: Reece Otto 06/10/2021
 """
+import csv
 import numpy as np
 from .utils import find_span, basis_funs, weighted_control_points, one_basis_fun
 
@@ -448,3 +449,23 @@ class NURBSSurface(Surface):
                 temp += Bu[k] * self.G[uind+k][vind]
             denom += Bv[l] * temp
         return NIp * NJq * (self.P[I][J] - self(u, v)) / denom
+
+    def write_to_csv(self, file_name='nurbs_surf'):
+        with open(file_name + '.csv', 'w', encoding='UTF8', newline='') as f:
+            writer = csv.writer(f, delimiter=' ')
+            writer.writerow(str(self.p))
+            writer.writerow(str(self.q))
+            writer.writerow(self.U)
+            writer.writerow(self.V)
+            N_Pu = len(self.P)
+            N_Pv = len(self.P[0])
+            dim = len(self.P[0][0])
+            writer.writerow(str(N_Pu))
+            writer.writerow(str(N_Pv))
+            writer.writerow(str(dim))
+            point_weight = np.zeros(dim+1)
+            for i in range(N_Pu):
+                for j in range(N_Pv):
+                    point_weight[:-1] = self.P[i][j]
+                    point_weight[-1] = self.G[i][j]
+                    writer.writerow(point_weight)

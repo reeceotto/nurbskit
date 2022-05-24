@@ -7,6 +7,7 @@ from datetime import datetime
 from nurbskit.surface import NURBSSurface
 import numpy as np
 import pyvista as pv
+import csv
 
 def holl_string(string):
     """
@@ -268,3 +269,43 @@ def surf_to_vtk(Surface, file_name='surface', N_u=100, N_v=100):
     surf_grid = pv.StructuredGrid(surf_coords[:,:,0], surf_coords[:,:,1], 
         surf_coords[:,:,2])
     surf_grid.save(file_name + '.vtk')
+
+P_ROW = 0
+Q_ROW = 1
+U_ROW = 2
+V_ROW = 3
+N_PU_ROW = 4
+N_PV_ROW = 5
+DIM_ROW = 6
+FIRST_PT_ROW = 7
+    
+def import_nurbs_surf(file_name):
+    i = 0
+    with open(file_name + '.csv') as csv_file:
+        nurbs_data = list(csv.reader(csv_file, delimiter=' '))
+        for index, row in enumerate(nurbs_data):
+            if index == P_ROW:
+                p = int(row[0])
+            elif index == Q_ROW:
+                q = int(row[0])
+            elif index == U_ROW:
+                U = np.array([float(i) for i in row])
+            elif index == V_ROW:
+                V = np.array([float(i) for i in row])
+            elif index == N_PU_ROW:
+                N_Pu = int(row[0])
+            elif index == N_PV_ROW:
+                N_Pv = int(row[0])
+                last_pt_row = N_Pu*N_Pv + FIRST_PT_ROW
+            elif index == DIM_ROW:
+                dim = int(row[0])
+                P = np.zeros((N_Pu, N_Pv, dim))
+                G = np.zeros((N_Pu, N_Pv))
+            elif index >= FIRST_PT_ROW and index <= last_pt_row:
+                j = (index - FIRST_PT_ROW) % N_Pv
+                if j == 0 and index != FIRST_PT_ROW:
+                    i += 1
+                P[i][j] = [float(i) for i in row[:-1]]
+                G[i][j] = float(row[-1])
+
+    return NURBSSurface(p=p, q=q, U=U, V=V, P=P, G=G)

@@ -116,7 +116,7 @@ def fit_bspline_path(Q, N_P, p, tol=1E-6):
     global it_no
     it_no = 0
     print('Fitting B-Spline path to point data. \n')
-    sol = minimize(sum_dist, design_vars, method='SLSQP', 
+    sol = minimize(sum_dist, design_vars, method='Nelder-Mead', 
         callback=call_back, args=(spline, Q), options={'disp':True, 
         'maxiter':200})
 
