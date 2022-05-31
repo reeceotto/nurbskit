@@ -19,7 +19,7 @@ class Path(object):
             raise AttributeError(err_msg)
 
         # check if all control points are either 2D or 3D
-        dims = np.ones(len(P))
+        dims = np.zeros(len(P))
         for i in range(len(P)):
             dims[i] = len(P[i])
         if not np.all(dims == dims[0]):
@@ -46,9 +46,9 @@ class Path(object):
     
     def u_mid(self):
         """Calculates the parametric mid-point of path."""
-        return (self.u_start()+self.u_end()) / 2
+        return (self.u_start() + self.u_end())/2
 
-    def list_eval(self, u_i=0, u_f=1, n_points=100):
+    def discretize(self, u_i=0, u_f=1, n_points=100):
         """
         Evalutes points along a path.
         
@@ -61,7 +61,7 @@ class Path(object):
             coords (np.ndarray): coordinates of points along path
         """
         u_vals = np.linspace(u_i, u_f, n_points)
-        coords = np.ones((n_points, len(self.P[0])))
+        coords = np.zeros((n_points, len(self.P[0])))
         for i in range(n_points):
             coords[i] = self(u_vals[i])
         return coords
@@ -126,10 +126,12 @@ class Bezier(Path):
         U = knot vector
     """
     def __init__(self, P):
+        # check if control point array is valid
+        super().__init__(P)
+
         # assign control points, degree and knot vector to Bezier path object
-        super.__init__(P)
         self.p = int(len(self.P) - 1)
-        self.U = np.nan * np.ones(len(self.P) + self.p + 1)
+        self.U = np.zeros(len(self.P) + self.p + 1)
         self.U[:self.p+1] = 0.0
         self.U[self.p+1:] = 1.0
 
@@ -156,6 +158,9 @@ class BSpline(Path):
         U = knot vector
     """
     def __init__(self, P, p, U):
+        # check if control point array is valid
+        super().__init__(P)
+
         # check if path degree is valid
         if p > len(P) - 1:
             err_msg = 'Degree of B-Spline path is not compatible with'\
@@ -173,7 +178,7 @@ class BSpline(Path):
             raise AttributeError(err_msg)
 
         # assign attributes of B-Spline path object
-        super.__init__(P)
+        
         self.p = p
         self.U = np.array(U)
 
@@ -202,7 +207,7 @@ class BSpline(Path):
         Returns:
             CK (np.ndarray): derivatives
         """
-        CK = np.nan * np.ones(shape=(d+1, len(self.P[0])))
+        CK = np.zeros(shape=(d+1, len(self.P[0])))
         du = min(d, self.p)
         for k in range(self.p+1, d+1):
             CK[k] = 0.0
@@ -261,11 +266,14 @@ class NURBS(Path):
         U = knot vector
     """
     def __init__(self, P, G, p, U):
+        # check if control point array is valid
+        super().__init__(P)
+
         # check if there is a weight for each control point
         if len(G) != len(P):
             err_msg = 'The number of control points and the number '\
-                'of control point weights are not equal. \n'\
-                f'Number of control points: {len(P)}. \n'
+                'of control point weights are not equal. \n' + \
+                f'Number of control points: {len(P)}. \n' + \
                 f'Number of control point weights: {len(G)}.'
             raise AttributeError(err_msg)
 
@@ -286,7 +294,6 @@ class NURBS(Path):
             raise AttributeError(err_msg)
 
         # assign attributes of NURBS path object
-        super.__init__(P)
         self.G = np.array(G)
         self.p = p
         self.U = np.array(U)
@@ -312,7 +319,7 @@ class NURBS(Path):
         """
         TODO: this function does not work
 
-        CK = np.nan * np.ones(shape=(d+1, len(self.P[0])))
+        CK = np.zeros(shape=(d+1, len(self.P[0])))
         du = min(d, self.p)
         for k in range(self.p+1, d+1):
             CK[k] = 0.0
@@ -328,7 +335,7 @@ class NURBS(Path):
         # calculate Cw(u) derivatives using modified version of
         # A3.2 on pg 93 of 'The NURBS Book' - Les Piegl & Wayne Tiller, 1997
         Pw = weighted_control_points(self.P, self.G)
-        CwK = np.nan * np.ones(shape=(d+1, len(Pw[0])))
+        CwK = np.zeros(shape=(d+1, len(Pw[0])))
         du = min(d, self.p)
         for k in range(self.p+1, d+1):
             CwK[k] = 0.0
@@ -344,7 +351,7 @@ class NURBS(Path):
         # A4.2 on pg 127 of 'The NURBS Book' - Les Piegl & Wayne Tiller, 1997
         Aders = CwK[:,:-1]
         wders = CwK[:,-1]
-        CK = np.nan * np.ones(shape=(d+1, len(self.P[0])))
+        CK = np.zeros(shape=(d+1, len(self.P[0])))
         for k in range(d+1):
             v = Aders[k]
             for i in range(1, k+1):
@@ -424,7 +431,7 @@ class Ellipse(NURBS):
              [a+h, -b+k], [h, -b+k], [-a+h, -b+k], [-a+h, k]]
         G = [1, 1, 2, 1, 1, 1, 2, 1, 1]
         U = [0, 0, 0, 1/4, 1/4, 1/2, 1/2, 3/4, 3/4, 1, 1, 1]
-        super.__init__(P, G, p, U)
+        super().__init__(P, G, p, U)
 
 class Rectangle(BSpline):
     def __init__(self, width, height, centre):
@@ -434,4 +441,4 @@ class Rectangle(BSpline):
             [x, y-height/2], [x-width/2, y-height/2], [x-width/2, y]]
         p = 1
         U = auto_knot_vector(len(P), p)
-        super.__init__(P, p, U)
+        super().__init__(P, p, U)
