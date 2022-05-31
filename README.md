@@ -14,21 +14,21 @@ The primary tools in NURBSKit are:
 - geometric transformation (scale, translation and rotation)
 - point inversion and projection
 - IGES and VTK surface export
-- curve and surface interpolation and approximation
-- visualisation interface using matplotlib
+- curve and surface interpolation
+- visualisation
 - parameterization and shape manipulation using free-form deformation
 
 ---
 
 ## Installation
 
-The following command will clone the repository to `$HOME/nurbskit`.
+Clone the repository with the following command:
 
 ```
 git clone git@github.com:reeceotto/nurbskit.git nurbskit
 ```
 
-After cloning, navigate to `$HOME/nurbskit` and add nurbskit as a Python package
+After cloning, navigate to `/nurbskit` and add nurbskit as a Python package
 using pip:
 
 ```
@@ -38,9 +38,9 @@ using pip:
 ---
 
 ## Acknowledgements
-Many of the algorithms used in NURBSKit are from 'The NURBS Book' by Piegl and
+Many of the algorithms used in NURBSKit are from *'The NURBS Book'* by Piegl and
 Tiller:
 
-Les Piegl and Wayne Tiller. The NURBS Book. Monographs in Visual Communication. 
+*Les Piegl and Wayne Tiller. The NURBS Book. Monographs in Visual Communication. 
 Springer, Berlin, Heidelberg, 2nd edition, 1997. ISBN 978-3-642-59223-2. 
-DOI: 10.1007/978-3-642-59223-2.
+DOI: 10.1007/978-3-642-59223-2.*
