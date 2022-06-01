@@ -86,7 +86,7 @@ class Surface():
         else:
             return 1
 
-    def list_eval(self, u_i=0, u_f=1, N_u=100, v_i=0, v_f=1, N_v=100):
+    def discretize(self, u_i=0, u_f=1, N_u=100, v_i=0, v_f=1, N_v=100):
         """
         Evalutes a list of points along a surface.
         
