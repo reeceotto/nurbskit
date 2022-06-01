@@ -54,7 +54,7 @@ def path_plot_2D(path, axes=None, show_path=True, show_control_points=True,
         # evaluate points along curve
         u_i = kwargs.get('u_i', path.u_start())
         u_f = kwargs.get('u_f', path.u_end())
-        path_coords = path.list_eval(u_i=u_i, u_f=u_f, n_points=n_points)
+        path_coords = path.discretize(u_i=u_i, u_f=u_f, n_points=n_points)
 
         # plot curve
         axes.plot(path_coords[:,0], path_coords[:,1], path_style, 
