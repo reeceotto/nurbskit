@@ -265,7 +265,7 @@ def surf_to_vtk(Surface, file_name='surface', N_u=100, N_v=100):
         N_u = number of mesh points along u direction
         N_v = number of mesh points along v direction
     """
-    surf_coords = Surface.list_eval(N_u=N_u, N_v=N_v)
+    surf_coords = Surface.discretize(N_u=N_u, N_v=N_v)
     surf_grid = pv.StructuredGrid(surf_coords[:,:,0], surf_coords[:,:,1], 
         surf_coords[:,:,2])
     surf_grid.save(file_name + '.vtk')
